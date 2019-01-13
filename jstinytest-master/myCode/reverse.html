@@ -1,0 +1,30 @@
+
+<script src="../simpletest.js"></script>
+<script>
+
+
+
+function reverse(array) {
+    
+    for (var i = 0; i < array.length/2; i++) {
+        var temp = array[i];
+        array[i] = array[array.length-1-i];
+        array[array.length-1-i] = temp;
+    }
+    
+    return array;
+}
+
+tests({
+
+    'reverse reverses the array': function() {
+        array = [1,2,3,4,5,6,7];
+        assertEqualArrays(reverse(array), [7,6,5,4,3,2,1]);
+    },
+    'reverse returns the array': function() {
+        var array = [1, 6, 2, -5, 4];
+        eq(reverse(array), array);
+    }
+
+});
+</script>

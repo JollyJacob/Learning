@@ -1,0 +1,65 @@
+
+<script src="../simpletest.js"></script>
+<script>
+
+
+
+function appendFirstArrayToSecondArray(firstArray, secondArray) {
+    // Modifies secondArray by appending the elements of firstArray to it
+    for (var i = 0; i < firstArray.length; i++) {
+        secondArray.push(firstArray[i]);
+    }
+}
+function concat(array) {
+    // Note: the values to be concatenated should follow array in the list of arguments.
+    // These values will be accessed via the array of arguments.
+    newArray = [];
+    // Copy the elements from the old array to the new array
+    appendFirstArrayToSecondArray(array, newArray);
+    // Add any other arguments to the new array
+    for (var i = 1; i < arguments.length; i++) {
+        if (arguments[i] === undefined) {
+            // Make newArray into shallow copy of array and return it
+            newArray = [];
+            appendFirstArrayToSecondArray(array, newArray);
+            return newArray;
+        }
+        if (arguments[i] instanceof Array) {
+            // arguments[i] is an array
+            appendFirstArrayToSecondArray(arguments[i], newArray);
+        } else {
+            // arguments[i] is a single value
+            newArray.push(arguments[i]);
+        }
+    }
+    return newArray;
+}
+
+tests({
+
+    'concat returns the correct array when singleton values are given as arguments': function() {
+        array = [4, 'b', 2];
+        assertEqualArrays(concat(array, 9, -1, "happy"), [4, 'b', 2, 9, -1, "happy"]);
+    },
+    'concat returns the correct array when array values are given as arguments': function() {
+        array = [4, 'b', 2];
+        assertEqualArrays(concat(array, 9, [-1, 0], "happy"), [4, 'b', 2, 9, -1, 0, "happy"]);
+    },
+    'if one of the given values is undefined, concat returns a shallow copy of the original array': function() {
+        array = [4, 'b', 2];
+        assertEqualArrays(concat(array, 9, [-1, 0], undefined), array);
+    },
+    'concat does not mutate the array on which it is called': function() {
+        var array = [1, 6, 2, -5, 4];
+        var arrayCopy = [1, 6, 2, -5, 4];
+
+        concat(array, 1, 'f', [0, 5]);
+
+        eq(array.length, arrayCopy.length);
+        for (var i = 0; i < array.length; i++) {
+            eq(array[i], arrayCopy[i]);
+        }
+    }
+
+});
+</script>

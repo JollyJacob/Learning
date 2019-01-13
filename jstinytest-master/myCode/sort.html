@@ -1,0 +1,59 @@
+
+<script src="../simpletest.js"></script>
+<script>
+
+
+
+
+function sort(array, compareFunction) {
+    if (compareFunction === undefined) {
+        compareFunction = function(a, b) {
+            return (a < b);
+        };
+    }
+
+    // I think this sorting algorithm is called the Bubble Sort
+    var sortingComplete = false;
+    while (!sortingComplete) {
+        sortingComplete = true;
+        for (var i = 0; i < array.length-1; i++) {
+            if (!compareFunction(array[i], array[i+1])) {
+                // Flip the two neighboring elements
+                var temp = array[i];
+                array[i] = array[i+1];
+                array[i+1] = temp;
+                sortingComplete = false;
+            }
+        }
+    }
+
+    return array;
+}
+
+tests({
+
+    'sort sorts an array of numbers using default comparison function': function() {
+        array = [5,7,2,4,1,6,3];
+        sort(array);
+        assertEqualArrays(array, [1,2,3,4,5,6,7]);
+    },
+    'sort sorts an array of strings using default comparison function': function() {
+        array = ["jeffrey","hi","Icarus"];
+        sort(array);
+        assertEqualArrays(array, ["Icarus", "hi", "jeffrey"]);
+    },
+    'sort works using custom comparison function': function() {
+        array = [5,7,2,4,1,6,3];
+        function greaterThan(a, b) {
+            return (a > b);
+        }
+        sort(array, greaterThan);
+        assertEqualArrays(array, [7,6,5,4,3,2,1]);
+    },
+    'sort returns the array': function() {
+        var array = [1, 6, 2, -5, 4];
+        eq(sort(array), array);
+    }
+
+});
+</script>

@@ -1,0 +1,66 @@
+
+<script src="../simpletest.js"></script>
+<script>
+
+
+function reduceRight(array, callback, initialValue) {
+    var accum = initialValue;
+    var index = array.length-1;
+    while (accum === undefined && index >= 0) {
+        accum = array[index];
+        index--;
+    }
+    if (accum === undefined) {
+        // Neither the initialValue nor the array contained any defined values
+        throw new TypeError("Attempted reduceRight on empty array");
+    }
+
+    for (; index >= 0; index--) {
+        if (index in array) {
+            accum = callback(array[index], accum, index, array);
+        }
+    }
+
+    return accum;
+}
+
+tests({
+
+    'reduceRight accumulates correctly under normal circumstances with initial value': function() {
+        var result = reduceRight([3, 2], function add(a, b) {
+            return a + b;
+        }, 2);
+        eq(result, 7);
+    },
+    'reduceRight accumulates correctly under normal circumstances without initial value': function() {
+        var result = reduceRight([3, 2], function add(a, b) {
+            return a + b;
+        });
+        eq(result, 5);
+    },
+    'reduceRight returns initial value if array is empty': function() {
+        var result = reduceRight([], function add(a, b) {
+            return a + b;
+        }, 7);
+        eq(result, 7);
+    },
+    'reduceRight throws an error if array is empty and no initial value given': function() {
+        var threwError = false;
+        try {
+            reduceRight([], function() {} );
+        } catch (e) {
+            threwError = true;
+        }
+        assert(threwError);
+    },
+    'reduceRight skips unassigned indexes in the array': function() {
+        var array = [, 4, , 2, ];
+        var result = reduceRight(array, function add(a, b) {
+            return a + b;
+        });
+        eq(result, 6);
+    }
+
+
+});
+</script>

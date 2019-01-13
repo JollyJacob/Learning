@@ -1,0 +1,55 @@
+
+<script src="../simpletest.js"></script>
+<script>
+
+
+
+function fill(array, value, start, end) {
+    if (start === undefined) {
+        start = 0;
+    } else if (start < 0) {
+        start = array.length + start;
+    }
+
+    if (end === undefined || end > array.length) {
+        end = array.length;
+    } else if (end < 0) {
+        end = array.length + end;
+    }
+
+    for (var i = start; i < end; i++) {
+        array[i] = value;
+    }
+    return array;
+}
+
+tests({
+
+    'fill returns an array filled correctly using the value, start, and end parameters': function() {
+        array = [1,2,3,4,5,6,7];
+        assertEqualArrays(fill(array, "z", 2, 6), [1,2,"z","z","z","z",7]);
+    },
+    'fill uses the end of the array as default end': function() {
+        array = [1,2,3,4,5,6,7];
+        assertEqualArrays(fill(array, "z", 2), [1,2,"z","z","z","z","z"]);
+        assertEqualArrays(fill(array, "z", 2, 20), [1,2,"z","z","z","z","z"]);
+    },
+    'fill uses 0 as the default begin': function() {
+        array = [1,2,3,4,5,6,7];
+        assertEqualArrays(fill(array, "z"), ["z","z","z","z","z","z","z"]);
+    },
+    'fill works with negative begin': function() {
+        array = [1,2,3,4,5,6,7];
+        assertEqualArrays(fill(array, "z", -3), [1,2,3,4,"z","z","z"]);
+    },
+    'fill works with negative end': function() {
+        array = [1,2,3,4,5,6,7];
+        assertEqualArrays(fill(array, "z", -5, -2), [1,2,"z","z","z",6,7]);
+    },
+    'fill returns the array': function() {
+        var array = [1, 6, 2, -5, 4];
+        eq(fill(array, "z"), array);
+    }
+
+});
+</script>

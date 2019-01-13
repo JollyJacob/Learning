@@ -1,0 +1,46 @@
+
+<script src="../simpletest.js"></script>
+<script>
+
+
+function includes(array, valueToFind, fromIndex) {
+    if (fromIndex === undefined) {
+        fromIndex = 0;
+    } else if (fromIndex < 0) {
+        fromIndex = array.length + fromIndex;
+    }
+    // If the desired value is found, return true
+    for (var i = fromIndex; i < array.length; i++) {
+        if (array[i] === valueToFind) {
+            return true;
+        }
+    }
+    // No elements matched valueToFind
+    return false;
+}
+
+tests({
+
+    'includes returns true if some element of the array matches the valueToFind': function() {
+        assert(includes([-1, 0, 9, 2], 9));
+    },
+    'includes returns false if no element of the array matches valueToFind': function() {
+        assert(!includes([-1, 0, 9, 2], 4));
+    },
+    'includes works properly with fromIndex': function() {
+        assert(!includes([-1, 0, 9, 2], 0, 2));
+    },
+    'includes returns false if the array is empty': function() {
+        assert(!includes([], 0));
+    },
+    'includes does not mutate the array on which it is called': function() {
+        var array = [1, 6, 2, -5, 4];
+        var arrayCopy = [1, 6, 2, -5, 4];
+
+        includes(array, -5);
+
+        assertEqualArrays(array, arrayCopy);
+    }
+
+});
+</script>

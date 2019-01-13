@@ -1,0 +1,64 @@
+<script src="../tinytest.js"></script>
+<script src="adder.js"></script>
+<script>
+
+
+
+
+function forEach(array, callback, bindToThis) {
+  if (bindToThis) {
+    callback = callback.bind(bindToThis);
+  }
+  for(var i = 0; i < array.length; i++) {
+    callback(array[i], i, array);
+  }
+}
+
+tests({
+
+  'It should run the callback function array.length times': function() {
+    var numberOf = 0;
+    forEach([1,2,3], function() {
+      counter++;
+    });
+    eq(counter, 3);
+  },
+
+  'It should pass the ith element as the first argument to the callback function': function() {
+    var counter = 0;
+    var array = [1,2,3];
+    forEach(array, function(item) {
+      eq(item, array[counter]);
+      counter++;
+    });
+  },
+
+'It should pass the index i as the second argument to the callback function': function() {
+  var counter = 0;
+  var array = [1,2,3];
+  forEach(array, function(item, i) {
+    eq(i, counter);
+    counter++;
+  });
+},
+
+'It should pass the array as the third argument to the callback function': function() {
+  var counter = 0;
+  var array = [1,2,3];
+  forEach(array, function(item, i, theArray) {
+    eq(theArray, array);
+  });
+},
+
+'It should use the third argument as a this to bind to': function() {
+  var array = [1,2,3];
+  var object = {
+    foo: 'dummy'
+  }
+  forEach(array, function() {
+    eq(this, object);
+  }, object);
+}
+
+});
+</script>

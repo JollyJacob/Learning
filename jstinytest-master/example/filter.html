@@ -1,0 +1,35 @@
+
+<script src="../tinytest.js"></script>
+<script src="adder.js"></script>
+<script>
+
+
+function filter(array, callback, bindToThis) {
+    if (bindToThis) {
+        callback = callback.bind(bindToThis);
+    }
+    newArray = [];
+    for (var i = 0; i < array.length; i++) {
+        if (callback(array[i], i, array)) {
+            newArray.push(array[i]);
+        }
+    }
+    return newArray;
+}
+
+tests({
+
+  'It should return an array with elements filtered out according to callback function': function() {
+    var array = [1, 6, 2, -5, 4];
+    var expectedResult = [6, 4];
+    var actualResult = filter(array, function(item) {
+        return (item > 2);
+    });
+    eq(expectedResult.length, actualResult.length);
+    for (var i = 0; i < expectedResult.length; i++) {
+        eq(expectedResult[i], actualResult[i]);
+    }
+  }
+
+});
+</script>

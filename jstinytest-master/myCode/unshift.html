@@ -1,0 +1,49 @@
+
+<script src="../simpletest.js"></script>
+<script>
+
+
+function appendFirstArrayToSecondArray(firstArray, secondArray) {
+    // Modifies secondArray by appending the elements of firstArray to it
+    for (var i = 0; i < firstArray.length; i++) {
+        secondArray.push(firstArray[i]);
+    }
+}
+function unshift(array) {
+    // Note: this function uses the arguments array to know what elements to "unshift" in the array
+
+    // Make a copy of the array
+    var arrayCopy = [];
+    appendFirstArrayToSecondArray(array, arrayCopy);
+
+    // Clear out array and add the elements to "unshift"
+    array.length = 0;
+    //appendFirstArrayToSecondArray(arguments.slice(1), array);
+    // For some reason, slice doesn't work on the arguments array
+    for (var i = 1; i < arguments.length; i++) {
+        array.push(arguments[i]);
+    }
+    // Add back original contents of array
+    appendFirstArrayToSecondArray(arrayCopy, array);
+
+    return array.length;
+}
+
+tests({
+
+    'unshift correctly adds one element to beginning of array': function() {
+        var array = [1,2];
+        unshift(array, 3);
+        assertEqualArrays(array, [3,1,2]);
+    },
+    'unshift correctly adds multiple elements to beginning of array': function() {
+        var array = [1,2];
+        unshift(array, 3, 4, 5);
+        assertEqualArrays(array, [3,4,5,1,2]);
+    },
+    'unshift returns the length of the new array': function() {
+        eq(unshift([1,2], 3, 4, 5), 5);
+    }
+
+});
+</script>

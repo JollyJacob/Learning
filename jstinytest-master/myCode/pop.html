@@ -1,0 +1,32 @@
+
+<script src="../simpletest.js"></script>
+<script>
+
+
+
+function pop(array) {
+    var poppedValue = undefined;
+    if (array.length > 0) {
+        poppedValue = array[array.length-1];
+        array.length--;
+    }
+    return poppedValue;
+}
+
+tests({
+
+    'pop correctly removes last element of array': function() {
+        var array = [1,2,3];
+        pop(array);
+        assertEqualArrays(array, [1,2]);
+    },
+    'pop returns the element it pops': function() {
+        var array = [1,2,3];
+        eq(pop(array), 3);
+    },
+    'pop returns undefined if called on an empty array': function() {
+        eq(pop([]), undefined);
+    }
+
+});
+</script>

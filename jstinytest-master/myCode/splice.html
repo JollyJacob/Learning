@@ -1,0 +1,77 @@
+
+<script src="../simpletest.js"></script>
+<script>
+
+
+
+
+
+function appendFirstArrayToSecondArray(firstArray, secondArray) {
+    // Modifies secondArray by appending the elements of firstArray to it
+    for (var i = 0; i < firstArray.length; i++) {
+        secondArray.push(firstArray[i]);
+    }
+}
+function splice(array, start, deleteCount/*, item1, item2, ...*/) {
+
+    if (start > array.length) {
+        start = array.length;
+    } else if (start < 0) {
+        start = array.length + start;
+        if (start < 0) {
+            start = 0;
+        }
+    }
+
+    if (deleteCount === undefined || deleteCount > array.length-start) {
+        deleteCount = array.length-start;
+    }
+
+    // Separate the array into front (array), trim, and tail
+    var trim = array.slice(start, start+deleteCount);
+    var tail = array.slice(start+deleteCount);
+    array.length = start;
+
+    // Load all the new items into the array
+    for (var i = 3; i < arguments.length; i++) {
+        array.push(arguments[i]);
+    }
+    
+    // Graft the tail back on
+    appendFirstArrayToSecondArray(tail, array);
+
+    return trim;
+}
+
+tests({
+
+    'splice correctly modifies the array when there are more items than deletes': function() {
+        array = [1,2,3,4,5,6,7];
+        splice(array, 2, 1, 10, 11, 12);
+        assertEqualArrays(array, [1,2,10,11,12,4,5,6,7]);
+    },
+    'splice correctly modifies the array when there are more deletes than items': function() {
+        array = [1,2,3,4,5,6,7];
+        splice(array, 2, 4, 10, 11);
+        assertEqualArrays(array, [1,2,10,11,7]);
+    },
+    'no elements are removed if deleteCount is 0 or negative': function() {
+        array = [1,2,3,4,5,6,7];
+        splice(array, 2, 0, 10, 11, 12);
+        assertEqualArrays(array, [1,2,10,11,12,3,4,5,6,7]);
+    },
+    'splice uses the end of the array as default end': function() {
+        array = [1,2,3,4,5,6,7];
+        splice(array, 2);
+        assertEqualArrays(array, [1,2]);
+        array = [1,2,3,4,5,6,7];
+        splice(array, 2, 20);
+        assertEqualArrays(array, [1,2]);
+    },
+    'splice returns an array of the deleted elements': function() {
+        array = [1,2,3,4,5,6,7];
+        assertEqualArrays(splice(array, 2, 3, 10, 11, 12), [3,4,5]);
+    }
+
+});
+</script>

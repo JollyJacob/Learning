@@ -1,0 +1,39 @@
+
+<script src="../tinytest.js"></script>
+<script src="adder.js"></script>
+<script>
+
+
+function reduce(array, callback, initialValue) {
+    var accum = initialValue;
+    var index = 0;
+    while (accum === undefined && index < array.length) {
+        // If initialValue is undefined, assign accum to the first defined value in the array
+        accum = array[index];
+        index++;
+    }
+
+    for (; index < array.length; index++) {
+        if (index in array) {
+            var currentValue = array[index];
+            accum = callback(accum, currentValue, index, array);
+        } 
+    }
+
+    if (accum === undefined) {
+        throw new TypeError('The array was empty and there was no initialValue provided');
+    }
+    return accum;
+}
+
+tests({
+
+  'It should return the reduction of the array, ignoring holes': function() {
+    var array = [1, 6, , -5, 4];
+    var expectedResult = 6;
+    var actualResult = reduce(array, function add(a, b) { return a + b; });
+    eq(expectedResult, actualResult);
+  }
+
+});
+</script>

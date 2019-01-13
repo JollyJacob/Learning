@@ -1,0 +1,54 @@
+
+<script src="../simpletest.js"></script>
+<script>
+
+
+function indexOf(array, searchElement, fromIndex) {
+    if (fromIndex === undefined) {
+        fromIndex = 0;
+    }
+    // Return the index of the first element of the array matching searchElement
+    for (var i = fromIndex; i < array.length; i++) {
+        if (array[i] === searchElement) {
+            return i;
+        }
+    }
+    // No such index was found
+    return -1;
+}
+
+tests({
+
+    'indexOf returns the index of the first element matching the searchElement': function() {
+        var array = [1, 6, 2, -5, 4, 6];
+        var result = indexOf(array, 6);
+        eq(result, 1);
+    },
+    'If no element matches searchElement, or array.length is 0, indexOf returns -1': function() {
+        var array = [1, 6, 2, -5, 4];
+        var result = indexOf(array, -10);
+        eq(result, -1);
+        var result = indexOf([], 2);
+        eq(result, -1);
+    },
+    'indexOf returns the index of the first element matching the searchElement, when fromIndex is specified': function() {
+        var array = [1, 6, 2, -5, 4, 6];
+        var result = indexOf(array, 6, 3);
+        eq(result, 5);
+    },
+    'If fromIndex is not a valid index, indexOf returns -1': function() {
+        var array = [1, 6, 2, -5, 4];
+        var result = indexOf(array, 2, 8);
+        eq(result, -1);
+    },
+    'indexOf does not mutate the array on which it is called': function() {
+        var array = [1, 6, 2, -5, 4];
+        var arrayCopy = [1, 6, 2, -5, 4];
+
+        indexOf(array, 6);
+
+        assertEqualArrays(array, arrayCopy);
+    }
+
+});
+</script>

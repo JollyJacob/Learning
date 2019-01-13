@@ -1,0 +1,55 @@
+
+<script src="../simpletest.js"></script>
+<script>
+
+
+function lastIndexOf(array, searchElement, fromIndex) {
+    if (fromIndex === undefined) {
+        fromIndex = 0;
+    }
+    var result = -1;
+    // Search array for elements matching searchElement
+    // Search the entire array, overwriting previous results if new matching indexes are found
+    for (var i = fromIndex; i < array.length; i++) {
+        if (array[i] === searchElement) {
+            result = i;
+        }
+    }
+    return result;
+}
+
+tests({
+
+    'lastIndexOf returns the index of the last element matching the searchElement': function() {
+        var array = [1, 6, 2, -5, 4, 6];
+        var result = lastIndexOf(array, 6);
+        eq(result, 5);
+    },
+    'If no element matches searchElement, or array.length is 0, lastIndexOf returns -1': function() {
+        var array = [1, 6, 2, -5, 4];
+        var result = lastIndexOf(array, -10);
+        eq(result, -1);
+        var result = lastIndexOf([], 2);
+        eq(result, -1);
+    },
+    'lastIndexOf returns the index of the first element matching the searchElement, when fromIndex is specified': function() {
+        var array = [1, 6, 2, -5, 4, 6];
+        var result = lastIndexOf(array, 2, 3);
+        eq(result, -1);
+    },
+    'If fromIndex is not a valid index, lastIndexOf returns -1': function() {
+        var array = [1, 6, 2, -5, 4];
+        var result = lastIndexOf(array, 2, 8);
+        eq(result, -1);
+    },
+    'lastIndexOf does not mutate the array on which it is called': function() {
+        var array = [1, 6, 2, -5, 4];
+        var arrayCopy = [1, 6, 2, -5, 4];
+
+        lastIndexOf(array, 6);
+
+        assertEqualArrays(array, arrayCopy);
+    }
+
+});
+</script>

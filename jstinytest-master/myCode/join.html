@@ -1,0 +1,55 @@
+
+<script src="../simpletest.js"></script>
+<script>
+
+
+
+function join(array, separator) {
+    if (separator === undefined) {
+        separator = ",";
+    }
+
+    var result = "";
+    for (var i = 0; i < array.length; i++) {
+        if (array[i] !== undefined && array[i] !== null) {
+            result = result + array[i];
+        }
+        if (i < array.length-1) {
+            result = result + separator;
+        }
+    }
+    return result;
+}
+
+tests({
+
+    'join works for a specified separator': function() {
+        array = [1,2,3,4,5,6,7];
+        eq(join(array, "+"), "1+2+3+4+5+6+7");
+    },
+    'join uses comma as default separator': function() {
+        array = [1,2,3,4,5,6,7];
+        eq(join(array), "1,2,3,4,5,6,7");
+    },
+    'join works with empty string separator': function() {
+        array = [1,2,3,4,5,6,7];
+        eq(join(array, ""), "1234567");
+    },
+    'join returns empty string for an empty array': function() {
+        eq(join([], "+"), "");
+    },
+    'join renders undefined and null values as empty strings': function() {
+        array = [undefined,3,4,5,null,7];
+        eq(join(array), ",3,4,5,,7");
+    },
+    'join does not mutate the array on which it is called': function() {
+        var array = [1, 6, 2, -5, 4];
+        var arrayCopy = [1, 6, 2, -5, 4];
+
+        join(array, 1, 'f', [0, 5]);
+
+        assertEqualArrays(array, arrayCopy);
+    }
+
+});
+</script>

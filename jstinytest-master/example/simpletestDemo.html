@@ -1,0 +1,40 @@
+
+<h1 id = "summary"></h1>
+<script src="../simpletest.js"></script>
+<script>
+
+
+function reduce(array, callback, initialValue) {
+    var accum = initialValue;
+    var index = 0;
+    while (accum === undefined && index < array.length) {
+        // If initialValue is undefined, assign accum to the first defined value in the array
+        accum = array[index];
+        index++;
+    }
+
+    for (; index < array.length; index++) {
+        if (index in array) {
+            var currentValue = array[index];
+            accum = callback(accum, currentValue, index, array);
+        } 
+    }
+
+    if (accum === undefined) {
+        throw new TypeError('The array was empty and there was no initialValue provided');
+    }
+    return accum;
+}
+
+tests({
+
+  'Sample success': function() {
+    eq(1, 1);
+  },
+
+  'Sample failure': function() {
+    eq(1, 2);
+  }
+
+});
+</script>

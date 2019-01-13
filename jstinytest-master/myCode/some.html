@@ -1,0 +1,73 @@
+
+<script src="../simpletest.js"></script>
+<script>
+
+
+function some(array, callback, thisArg) {
+    // If thisArg is included, bind callback to thisArg
+    if (thisArg) {
+        callback = callback.bind(thisArg);
+    }
+    // If any element of the array passes the check, return true
+    for (var i = 0; i < array.length; i++) {
+        if (i in array && callback(array[i], i, array)) {
+            return true;
+        }
+    }
+    // No elements of the array passed the check
+    return false;
+}
+
+tests({
+
+    'some returns true if some element of the array passes the check': function() {
+        function isGreaterThan2(number) {
+            return (number > 2);
+        };
+        assert(some([-1, 0, 9, 2], isGreaterThan2));
+    },
+    'some returns false if no element of the array passes the check': function() {
+        function isGreaterThan2(number) {
+            return (number > 2);
+        };
+        assert(!some([0, 2], isGreaterThan2));
+    },
+    'some returns false if the array is empty': function() {
+        function isGreaterThan2(number) {
+            return (number > 2);
+        };
+        assert(!some([], isGreaterThan2));
+    },
+    'If thisArg is provided, some binds callback to thisArg': function() {
+        var array = [1];
+        var dummyObject = {};
+        some(array, function() {
+            eq(this, dummyObject);
+        }, dummyObject);
+    },
+    'callback is not invoked for unassigned indexes in the array': function() {
+        var array = [, , 2, , ];
+        var counterObject = {
+            count: 0
+        };
+        some(array, function() {
+            this.count++;
+        }, counterObject);
+        eq(counterObject.count, Object.keys(array).length);
+    },
+    'some does not mutate the array on which it is called': function() {
+        var array = [1, 6, 2, -5, 4];
+        var arrayCopy = [1, 6, 2, -5, 4];
+
+        some(array, function isGreaterThan2(number) {
+            return (number > 2);
+        });
+
+        eq(array.length, arrayCopy.length);
+        for (var i = 0; i < array.length; i++) {
+            eq(array[i], arrayCopy[i]);
+        }
+    }
+
+});
+</script>

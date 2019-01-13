@@ -1,0 +1,35 @@
+
+<script src="../simpletest.js"></script>
+<script>
+
+
+
+function shift(array) {
+    var removedValue = undefined;
+    if (array.length > 0) {
+        removedValue = array[0];
+        for (var i = 0; i < array.length-1; i++) {
+            array[i] = array[i+1];
+        }
+        array.length--;
+    }
+    return removedValue;
+}
+
+tests({
+
+    'shift correctly removes first element of array': function() {
+        var array = [1,2,3];
+        shift(array);
+        assertEqualArrays(array, [2,3]);
+    },
+    'shift returns the element it shifts': function() {
+        var array = [1,2,3];
+        eq(shift(array), 1);
+    },
+    'shift returns undefined if called on an empty array': function() {
+        eq(shift([]), undefined);
+    }
+
+});
+</script>
